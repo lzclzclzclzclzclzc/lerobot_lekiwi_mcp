@@ -1,0 +1,436 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: MCP_test
+  use_icon_as_answer_icon: false
+dependencies: []
+kind: app
+version: 0.3.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: agent
+      id: 1755571409683-source-1755571424285-target
+      source: '1755571409683'
+      sourceHandle: source
+      target: '1755571424285'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: agent
+        targetType: answer
+      id: 1755571424285-source-answer-target
+      source: '1755571424285'
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables: []
+      height: 54
+      id: '1755571409683'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1755571424285.text#}}'
+        desc: ''
+        selected: false
+        title: 直接回复
+        type: answer
+        variables: []
+      height: 105
+      id: answer
+      position:
+        x: 680
+        y: 282
+      positionAbsolute:
+        x: 680
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        agent_parameters:
+          instruction:
+            type: constant
+            value: 调用工具，按照用户的动作指令添加动作，最后需要调用执行函数
+          maximum_iterations:
+            type: constant
+            value: 6
+          mcp_servers_config:
+            type: constant
+            value: "{\n  \"server_name1\": {\n    \"transport\": \"sse\",\n    \"\
+              url\": \"http://host.docker.internal:12345/sse\"\n  }\n}"
+          model:
+            type: constant
+            value:
+              completion_params: {}
+              mode: chat
+              model: deepseek-chat
+              model_type: llm
+              provider: langgenius/deepseek/deepseek
+              type: model-selector
+          query:
+            type: constant
+            value: '{{#sys.query#}}'
+          tools:
+            type: constant
+            value:
+            - enabled: true
+              extra:
+                description: 获取 MCP 服务端的工具列表。
+              parameters:
+                servers_config:
+                  auto: 1
+                  value: null
+              provider_name: junjiem/mcp_sse/mcp_sse
+              provider_show_name: junjiem/mcp_sse/mcp_sse
+              schemas:
+              - auto_generate: null
+                default: 1
+                form: form
+                human_description:
+                  en_US: Fetch and call the preset MCP Resources as Tools.
+                  ja_JP: Fetch and call the preset MCP Resources as Tools.
+                  pt_BR: Fetch and call the preset MCP Resources as Tools.
+                  zh_Hans: 将预设的 MCP Resources 作为 Tools 返回和调用。
+                label:
+                  en_US: MCP Resources as Tools
+                  ja_JP: MCP Resources as Tools
+                  pt_BR: MCP Resources as Tools
+                  zh_Hans: MCP 资源作为工具
+                llm_description: ''
+                max: null
+                min: null
+                name: resources_as_tools
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: 1
+                form: form
+                human_description:
+                  en_US: Fetch and call the preset MCP Prompts as Tools.
+                  ja_JP: Fetch and call the preset MCP Prompts as Tools.
+                  pt_BR: Fetch and call the preset MCP Prompts as Tools.
+                  zh_Hans: 将预设的 MCP Prompts 作为 Tools 返回和调用。
+                label:
+                  en_US: MCP Prompts as Tools
+                  ja_JP: MCP Prompts as Tools
+                  pt_BR: MCP Prompts as Tools
+                  zh_Hans: MCP 提示词作为工具
+                llm_description: ''
+                max: null
+                min: null
+                name: prompts_as_tools
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: MCP Servers config, support multiple MCP services. (Optional,
+                    Filling in this field will overwrite the MCP Servers config entered
+                    during authorization.)
+                  ja_JP: MCP Servers config, support multiple MCP services. (Optional,
+                    Filling in this field will overwrite the MCP Servers config entered
+                    during authorization.)
+                  pt_BR: MCP Servers config, support multiple MCP services. (Optional,
+                    Filling in this field will overwrite the MCP Servers config entered
+                    during authorization.)
+                  zh_Hans: MCP服务配置，支持多个MCP服务。 （选填，填写后将覆盖授权时填写的MCP服务配置。）
+                label:
+                  en_US: MCP Servers config
+                  ja_JP: MCP Servers config
+                  pt_BR: MCP Servers config
+                  zh_Hans: MCP 服务配置
+                llm_description: ''
+                max: null
+                min: null
+                name: servers_config
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              settings:
+                prompts_as_tools:
+                  value:
+                    type: constant
+                    value: true
+                resources_as_tools:
+                  value:
+                    type: constant
+                    value: true
+              tool_description: 获取 MCP 服务端的工具列表。
+              tool_label: 获取 MCP 工具列表
+              tool_name: mcp_sse_list_tools
+              type: builtin
+            - enabled: true
+              extra:
+                description: 调用 MCP 服务端工具。
+              parameters:
+                arguments:
+                  auto: 1
+                  value: null
+                servers_config:
+                  auto: 1
+                  value: null
+                tool_name:
+                  auto: 1
+                  value: null
+              provider_name: junjiem/mcp_sse/mcp_sse
+              provider_show_name: junjiem/mcp_sse/mcp_sse
+              schemas:
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: Name of the tool to execute.
+                  ja_JP: Name of the tool to execute.
+                  pt_BR: Name of the tool to execute.
+                  zh_Hans: 要执行的工具的名称。
+                label:
+                  en_US: Tool Name
+                  ja_JP: Tool Name
+                  pt_BR: Tool Name
+                  zh_Hans: 工具名称
+                llm_description: Name of the MCP tool to execute.
+                max: null
+                min: null
+                name: tool_name
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: Tool arguments (JSON string in the python dict[str, Any]
+                    format).
+                  ja_JP: Tool arguments (JSON string in the python dict[str, Any]
+                    format).
+                  pt_BR: Tool arguments (JSON string in the python dict[str, Any]
+                    format).
+                  zh_Hans: 工具的参数。
+                label:
+                  en_US: Arguments
+                  ja_JP: Arguments
+                  pt_BR: Arguments
+                  zh_Hans: 参数
+                llm_description: MCP Tool arguments (JSON string in the python dict[str,
+                  Any] format).
+                max: null
+                min: null
+                name: arguments
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: string
+              - auto_generate: null
+                default: 1
+                form: form
+                human_description:
+                  en_US: Fetch and call the preset MCP Resources as Tools.
+                  ja_JP: Fetch and call the preset MCP Resources as Tools.
+                  pt_BR: Fetch and call the preset MCP Resources as Tools.
+                  zh_Hans: 将预设的 MCP Resources 作为 Tools 返回和调用。
+                label:
+                  en_US: MCP Resources as Tools
+                  ja_JP: MCP Resources as Tools
+                  pt_BR: MCP Resources as Tools
+                  zh_Hans: MCP 资源作为工具
+                llm_description: ''
+                max: null
+                min: null
+                name: resources_as_tools
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: 1
+                form: form
+                human_description:
+                  en_US: Fetch and call the preset MCP Prompts as Tools.
+                  ja_JP: Fetch and call the preset MCP Prompts as Tools.
+                  pt_BR: Fetch and call the preset MCP Prompts as Tools.
+                  zh_Hans: 将预设的 MCP Prompts 作为 Tools 返回和调用。
+                label:
+                  en_US: MCP Prompts as Tools
+                  ja_JP: MCP Prompts as Tools
+                  pt_BR: MCP Prompts as Tools
+                  zh_Hans: MCP 提示词作为工具
+                llm_description: ''
+                max: null
+                min: null
+                name: prompts_as_tools
+                options: []
+                placeholder: null
+                precision: null
+                required: true
+                scope: null
+                template: null
+                type: boolean
+              - auto_generate: null
+                default: null
+                form: llm
+                human_description:
+                  en_US: MCP Servers config, support multiple MCP services. (Optional,
+                    Filling in this field will overwrite the MCP Servers config entered
+                    during authorization.)
+                  ja_JP: MCP Servers config, support multiple MCP services. (Optional,
+                    Filling in this field will overwrite the MCP Servers config entered
+                    during authorization.)
+                  pt_BR: MCP Servers config, support multiple MCP services. (Optional,
+                    Filling in this field will overwrite the MCP Servers config entered
+                    during authorization.)
+                  zh_Hans: MCP服务配置，支持多个MCP服务。 （选填，填写后将覆盖授权时填写的MCP服务配置。）
+                label:
+                  en_US: MCP Servers config
+                  ja_JP: MCP Servers config
+                  pt_BR: MCP Servers config
+                  zh_Hans: MCP 服务配置
+                llm_description: ''
+                max: null
+                min: null
+                name: servers_config
+                options: []
+                placeholder: null
+                precision: null
+                required: false
+                scope: null
+                template: null
+                type: string
+              settings:
+                prompts_as_tools:
+                  value:
+                    type: constant
+                    value: true
+                resources_as_tools:
+                  value:
+                    type: constant
+                    value: true
+              tool_description: 调用 MCP 服务端工具。
+              tool_label: 调用 MCP 工具
+              tool_name: mcp_sse_call_tool
+              type: builtin
+        agent_strategy_label: FunctionCalling (支持 MCP 工具)
+        agent_strategy_name: mcp_sse_function_calling
+        agent_strategy_provider_name: junjiem/mcp_see_agent/mcp_see_agent
+        desc: ''
+        meta:
+          minimum_dify_version: null
+          version: 0.0.1
+        output_schema: null
+        plugin_unique_identifier: junjiem/mcp_see_agent:0.2.2@2b54607cf4d6a03b39cdae1425af2d8bafd4dd87f3eef6dc3eaaa945c71c2231
+        selected: true
+        title: Agent
+        type: agent
+        version: '2'
+      height: 198
+      id: '1755571424285'
+      position:
+        x: 381
+        y: 285
+      positionAbsolute:
+        x: 381
+        y: 285
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: 133.40695199184722
+      y: 10.355308824800773
+      zoom: 1.1486983549970349
