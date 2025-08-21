@@ -1,11 +1,11 @@
-## 实现LLM控制lekiwi机器人的MCP
-### 环境要求
+# 实现LLM控制lekiwi机器人的MCP
+## 环境要求
 - **Python 3.10+**
 - **安装依赖：**
     ```bash
     pip install -r requirements.txt
 ------------
-### 部署本地mcp服务
+## 部署本地mcp服务
 - **进入 `server.py` 的目录下运行**
     ```bash
     python server.py
@@ -18,7 +18,7 @@
     mcp = FastMCP(name="Robot_Control", host="127.0.0.1", port=12345)
     ```
 ------
-### 部署dify
+## 部署dify
 - **需要安装以下插件：**
     - `MCP Agent 策略` 
     - `MCP SSE / StreamableHTTP`   
@@ -34,7 +34,7 @@
         ```
 - 完成配置后在聊天框里输入自然语言指令即可。
 ------------
-### ✅ 成功运行示例
+## ✅ 成功运行示例
 
 **输入的自然语言指令：**  
 
